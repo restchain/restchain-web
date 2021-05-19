@@ -51,7 +51,7 @@ const ContractLoader = (props) => {
                 <SubscribeAsOptional {...state}/>
                 <ContractInfo {...modelFetch.value}/>
                 <BPMNModelProcessor {...modelFetch.value} {...state}/>
-                <RESTListner {...modelFetch.value} {...state}/>
+                {/*<RESTListner {...modelFetch.value} {...state}/>*/}
                 <SmartContractCodeViewer {...modelFetch.value} />
             </div>)
     }

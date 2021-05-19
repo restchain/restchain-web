@@ -84,24 +84,25 @@ export const ProcessCurrentState = (props) => {
         elementsDisabled.map(d => highlightFunction0(d.ID.toString().replace("_resp", "")))
         elementsDone.map(d => highlightFunction2(d.ID.toString().replace("_resp", "")))
 
-        // console.log("enabled ", enabled)
-        return elementsEnabled.map((f, i) => {
-                const normalizedId = f.ID.replace(/-/g, '_');
-                const current = find(props.contract._jsonInterface, {'name': normalizedId});
-                // console.log(" currentcurrent", current)
-                return (
-                    <WrappedFunctionForm
-                        key={i} sid={f.ID}
-                        contract={props.contract}
-                        web3={props.web3}
-                        account={props.accounts[0]}
-                        callBack={props.callBack}
-                        canvas={canvas}
-                        viewer={modeler}
-                    />
-                )
-            }
-        );
+        // // console.log("enabled ", enabled)
+        // return elementsEnabled.map((f, i) => {
+        //         const normalizedId = f.ID.replace(/-/g, '_');
+        //         const current = find(props.contract._jsonInterface, {'name': normalizedId});
+        //         // console.log(" currentcurrent", current)
+        //         return (
+        //             <WrappedFunctionForm
+        //                 key={i} sid={f.ID}
+        //                 contract={props.contract}
+        //                 web3={props.web3}
+        //                 account={props.accounts[0]}
+        //                 callBack={props.callBack}
+        //                 canvas={canvas}
+        //                 viewer={modeler}
+        //             />
+        //         )
+        //     }
+        // );
+        return  <></>
     }
 
     return <div>Not element founds</div>
