@@ -21,6 +21,7 @@ export function ActionMenu({modeler}) {
     const [description, setDescription] = useState('');
     const [error, setError] = useState({});
     const [overwrite, setOverwrite] = useState(false);
+    const [importedXml, setImportedXml] = useState('');
 
 
     const {TextArea} = Input;
@@ -60,6 +61,8 @@ export function ActionMenu({modeler}) {
                         console.log("Imported new model");
                         notifySuccessfullyImported(file.name);
                         renderModel(modeler, newXml);
+                        setImportedXml(newXml)
+                        console.log("newXml ",newXml);
                         // exportArtifacts();
                     }, false);
 
@@ -122,7 +125,7 @@ export function ActionMenu({modeler}) {
                             modeler.saveXML({format: true}, function (err, xml) {
                                 fileXml = xml;
                             });
-
+                            console.log("fileXmlToUpload",fileXml);
                             var svg;
                             modeler.saveSVG({format: true}, function (err, svgGenerated) {
                                 if (err) {
@@ -134,7 +137,7 @@ export function ActionMenu({modeler}) {
                                 name: filename,
                                 description: description,
                                 overwrite: overwrite,
-                                data: fileXml,
+                                data: fileXml || importedXml,
                                 svg: svg
                             });
 
