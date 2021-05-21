@@ -1,6 +1,6 @@
 import {getBusinessObject, is} from "bpmn-js/lib/util/ModelUtil";
 import React, {useEffect, useState} from "react";
-import {Modal, Button, Input, Tabs, Spin} from "antd";
+import {Button, Input, Modal, Spin, Tabs} from "antd";
 import {createMessageFlowSemantics, createMessageShape, linkMessageFlowSemantics} from "chor-js/lib/util/MessageUtil"
 import extensionElements from "bpmn-js-properties-panel/lib/provider/camunda/parts/implementation/ExtensionElements";
 import cmdHelper from "bpmn-js-properties-panel/lib/helper/CmdHelper";
@@ -55,7 +55,7 @@ export function ElementProperties(props) {
             element = element.labelTarget;
         }
         setName(element.businessObject.name);
-    }, [])
+    }, [element])
 
     const [name, setName] = useState();
 
@@ -426,130 +426,137 @@ export function ElementProperties(props) {
                     {/*    <Input defaultValue={element.id} disabled={true}/>*/}
                     {/*</Form.Item>*/}
 
+                    <div style={{marginTop: 20, paddingTop: 10}}>
+                        {
+                            !is(element, 'bpmn:Choreography') &&
+                            <fieldset>
+                                <label>Name</label>
+                                <Input placeholder="Basic usage" value={name}
+                                       onChange={(e) => {
+                                           setName(e.target.value);
+                                           updateName(e.target.value)
+                                           console.log("Name editing ", name)
+                                       }}
+                                />
+                            </fieldset>
+                        }
 
-                    {
-                        !is(element, 'bpmn:Choreography') &&
-                        <fieldset>
-                            <label>name</label>
-                            <Input placeholder="Basic usage" value={name}
-                                   onChange={(e) => {
-                                       setName(e.target.value);
-                                       updateName(e.target.value)
-                                       console.log("Name editing ",name)
-                                   }}
-                            />
-                        </fieldset>
-                    }
-
-                    {
-                        is(element, 'custom:TopicHolder') &&
-                        <fieldset>
-                            <label>topic (custom)</label>
-                            <input value={element.businessObject.get('custom:topic')} onChange={(event) => {
-                                updateTopic(event.target.value)
-                            }}/>
-                        </fieldset>
-                    }
-                    {
-                        is(element, 'bpmn:Choreography') &&
-                        <fieldset>
-                            <label>topic (custom)</label>
-                            <input value={element.businessObject.get('custom:topic')} onChange={(event) => {
-                                updateTopic(event.target.value)
-                            }}/>
-                        </fieldset>
-                    }
+                        {
+                            is(element, 'custom:TopicHolder') &&
+                            <fieldset>
+                                <label>topic (custom)</label>
+                                <input value={element.businessObject.get('custom:topic')} onChange={(event) => {
+                                    updateTopic(event.target.value)
+                                }}/>
+                            </fieldset>
+                        }
+                        {
+                            is(element, 'bpmn:Choreography') &&
+                            <fieldset>
+                                <label>topic (custom)</label>
+                                <input value={element.businessObject.get('custom:topic')} onChange={(event) => {
+                                    updateTopic(event.target.value)
+                                }}/>
+                            </fieldset>
+                        }
+                    </div>
 
                     <fieldset>
-                        <label>actions</label><br/>
+                        <div style={{marginTop: 20}}>
+                            <label>Actions</label><br/>
 
-                        {
-                            is(element, 'bpmn:ChoreographyTask') &&
-                            <div>
-                                <Button onClick={makeServiceTask}>Add Task </Button>
-                                {console.log("CHIRE ", element)}
+                                is(element, 'bpmn:ChoreographyTask') &&
+                                <div>
+                                    <Button onClick={makeServiceTask}>Add Task </Button>
 
-                                {/*{element.children.map((e, i) => {*/}
-                                {/*    console.log(" aaa", e)*/}
-                                {/*    return <Button id={'rr' + i} onClick={() => addMessage(element.businessObject, e)}>Add*/}
-                                {/*        x {e.businessObject.name}</Button>*/}
-                                {/*})}*/}
+                                    {/*{element.children.map((e, i) => {*/}
+                                    {/*    console.log(" aaa", e)*/}
+                                    {/*    return <Button id={'rr' + i} onClick={() => addMessage(element.businessObject, e)}>Add*/}
+                                    {/*        x {e.businessObject.name}</Button>*/}
+                                    {/*})}*/}
 
-                            </div>
-                        }
+                                </div>
+                            }
 
-                        {
-                            is(element, 'bpmn:Message') &&
-                            <div>
-                                {!showAddInterfaceMethod && <div>
-                                    {/*<Button onClick={() => addProperties(element)}>Add Prop</Button>*/}
-                                    {/*<Button onClick={() => addBehaviour(element)}>Add behaviour</Button>*/}
-                                    {/*<Button onClick={() => addBehaviour2(element)}>Add behaviour2</Button>*/}
-                                    {/*<Button onClick={() => addBehaviour3(element)}>Add behaviour3</Button>*/}
-                                    {/*<Button onClick={() => addModifier(element)}>Add modifier</Button>*/}
-                                    {/*<Button onClick={() => addMethodInt(element)}>Add methoIht</Button>*/}
-                                    {/*<Button onClick={() => setShowAddInterfaceMethod(true)}>Add interface*/}
-                                    {/*    method</Button>*/}
-                                    {/*<Button onClick={() => setShowAddIpfs(true)}>Add IPFS</Button>*/}
+                            {
+                                is(element, 'bpmn:Message') &&
+                                <div>
+                                    {!showAddInterfaceMethod &&
+                                    <div style={{display: 'flex', flexDirection: 'column',marginTop:20}}>
+                                        {/*<Button onClick={() => addProperties(element)}>Add Prop</Button>*/}
+                                        {/*<Button onClick={() => addBehaviour(element)}>Add behaviour</Button>*/}
+                                        {/*<Button onClick={() => addBehaviour2(element)}>Add behaviour2</Button>*/}
+                                        {/*<Button onClick={() => addBehaviour3(element)}>Add behaviour3</Button>*/}
+                                        {/*<Button onClick={() => addModifier(element)}>Add modifier</Button>*/}
+                                        {/*<Button onClick={() => addMethodInt(element)}>Add methoIht</Button>*/}
+                                        {/*<Button onClick={() => setShowAddInterfaceMethod(true)}>Add interface*/}
+                                        {/*    method</Button>*/}
+                                        {/*<Button onClick={() => setShowAddIpfs(true)}>Add IPFS</Button>*/}
+
+                                        <div style={{width: 200}}>
+                                            <Button disabled={!name}
+                                                onClick={() => handleOnSubmitOk({
+                                                    interfaceMethod: false,
+                                                    name: name,
+                                                    params: {
+                                                        name: [name + "_rcid"],   //rcid : Remote Call Id
+                                                        type: ["string memory"],
+                                                    },
+                                                    pkeys: [0],
+                                                    rkeys: [],
+                                                }, element)
+                                                }>Set Request
+                                            </Button>
+                                        </div>
+                                        <div style={{width: 200,marginTop:10}}>
+                                            <Button
+                                                disabled={!name}
+                                                onClick={() => handleOnSubmitOk({
+                                                    interfaceMethod: false,
+                                                    name: name,
+                                                    params: {
+                                                        name: [name + "_rcbkid"],   //rcbkid : Remote CallBacK Id
+                                                        type: ["string memory"],
+                                                    },
+                                                    pkeys: [0],
+                                                    rkeys: [],
+                                                }, element)
+                                                }>Set Response</Button>
+                                        </div>
+                                    </div>}
+                                    {
+                                        showAddInterfaceMethod &&
+                                        <SignatureMethodDefinition
+                                            data={element.businessObject}
+                                            onSubmitOk={(values) => handleOnSubmitOk(values, element)}
+                                        />
+                                    }
+                                </div>
+                            }
+
+                            {
+                                <IpfsModal
+                                    visible={showAddIpfs}
+                                    onOk={(values) => {
+                                        handleOnSubmitOk(values, element);
+                                        setShowAddIpfs(false)
+                                    }}
+                                    onCancel={() => setShowAddIpfs(false)}
+                                />
 
 
-                                    <Button onClick={() => handleOnSubmitOk({
-                                        interfaceMethod: false,
-                                        name: name,
-                                        params: {
-                                            name: [name+"_rcid"],   //rcid : Remote Call Id
-                                            type: ["string memory"],
-                                        },
-                                        pkeys: [0],
-                                        rkeys: [],
-                                    }, element)
-                                    }>Add Remote Call</Button>
-
-                                    <Button onClick={() => handleOnSubmitOk({
-                                        interfaceMethod: false,
-                                        name: name,
-                                        params: {
-                                            name: [name+"_rcbkid"],   //rcbkid : Remote CallBacK Id
-                                            type: ["string memory"],
-                                        },
-                                        pkeys: [0],
-                                        rkeys: [],
-                                    }, element)
-                                    }>Add Remote Callback</Button>
-                                </div>}
-                                {
-                                    showAddInterfaceMethod &&
-                                    <SignatureMethodDefinition
-                                        data={element.businessObject}
-                                        onSubmitOk={(values) => handleOnSubmitOk(values, element)}
-                                    />
-                                }
-                            </div>
-                        }
-
-                        {
-                            <IpfsModal
-                                visible={showAddIpfs}
-                                onOk={(values) => {
-                                    handleOnSubmitOk(values, element);
-                                    setShowAddIpfs(false)
-                                }}
-                                onCancel={() => setShowAddIpfs(false)}
-                            />
+                            }
 
 
-                        }
+                            {
+                                is(element, 'bpmn:Event') && !hasDefinition(element, 'bpmn:MessageEventDefinition') &&
+                                <button onClick={makeMessageEvent}>Make Message Event</button>
+                            }
 
-
-                        {
-                            is(element, 'bpmn:Event') && !hasDefinition(element, 'bpmn:MessageEventDefinition') &&
-                            <button onClick={makeMessageEvent}>Make Message Event</button>
-                        }
-
-                        {
-                            is(element, 'bpmn:Task') && !isTimeoutConfigured(element) &&
-                            <button onClick={attachTimeout}>Attach Timeout</button>
-                        }
+                            {
+                                is(element, 'bpmn:Task') && !isTimeoutConfigured(element) &&
+                                <button onClick={attachTimeout}>Attach Timeout</button>
+                            }</div>
 
                     </fieldset>
                 </TabPane>
